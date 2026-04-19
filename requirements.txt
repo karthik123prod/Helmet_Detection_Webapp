@@ -11,5 +11,5 @@ pandas==2.2.3
 openpyxl==3.1.5
 yagmail==0.15.293
 tf-keras==2.16.0
-tensorflow==2.16.2
+tensorflow-cpu==2.16.2
 pydantic-settings==2.5.2
