@@ -19,7 +19,10 @@ export const detectImage = (file, confidence = 0.5) => {
   const formData = new FormData();
   formData.append('file', file);
   return api.post(`/detect/image?confidence=${confidence}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 
+      'Content-Type': 'multipart/form-data',
+      'ngrok-skip-browser-warning': 'true'
+    },
   });
 };
 
@@ -27,7 +30,10 @@ export const detectVideo = (file, confidence = 0.5, skipFrames = 2) => {
   const formData = new FormData();
   formData.append('file', file);
   return api.post(`/detect/video?confidence=${confidence}&skip_frames=${skipFrames}&max_frames=300`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 
+      'Content-Type': 'multipart/form-data',
+      'ngrok-skip-browser-warning': 'true'
+    },
   });
 };
 
