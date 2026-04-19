@@ -52,6 +52,18 @@ class ModelManager:
             )
         return self._plate
 
+    async def initialize(self):
+        """Eagerly load all models into memory."""
+        logger.info("⏳ Loading ML models into memory... this may take a moment.")
+        _ = self.bike_person_detector
+        _ = self.helmet_detector
+        _ = self.plate_classifier
+        logger.info("✅ All models loaded and ready.")
+
     @property
     def is_ready(self) -> bool:
-        return self._bike_person is not None
+        return (
+            self._bike_person is not None and 
+            self._helmet is not None and 
+            self._plate is not None
+        )

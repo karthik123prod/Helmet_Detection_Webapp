@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Clock, AlertTriangle, Image, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getHistory, deleteDetection } from '../services/api';
+import { getHistory, deleteDetection, API_BASE } from '../services/api';
 
 export default function HistoryPage({ showToast }) {
   const [items, setItems] = useState([]);
@@ -9,7 +9,6 @@ export default function HistoryPage({ showToast }) {
   const [pagination, setPagination] = useState({ total: 0, total_pages: 0 });
   const [selected, setSelected] = useState(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL || '';
 
   useEffect(() => {
     loadHistory();

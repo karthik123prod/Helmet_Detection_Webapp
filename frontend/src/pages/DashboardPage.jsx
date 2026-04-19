@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Users, HardHat, Clock, Upload, ArrowRight, AlertTriangle, Image } from 'lucide-react';
-import { getStats, getHistory } from '../services/api';
+import { getStats, getHistory, API_BASE } from '../services/api';
 
 export default function DashboardPage({ showToast }) {
   const navigate = useNavigate();
@@ -33,7 +33,6 @@ export default function DashboardPage({ showToast }) {
     }
   };
 
-  const API_BASE = import.meta.env.VITE_API_URL || '';
 
   return (
     <div>

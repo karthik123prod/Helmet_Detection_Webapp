@@ -32,6 +32,11 @@ async def lifespan(app: FastAPI):
     # Initialize database
     await init_db()
     logger.info("✅ Database initialized")
+
+    # Eagerly load models
+    from backend.inference.model_manager import ModelManager
+    await ModelManager().initialize()
+
     logger.info("✅ API server ready at http://{}:{}", settings.APP_HOST, settings.APP_PORT)
 
     yield
@@ -52,7 +57,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

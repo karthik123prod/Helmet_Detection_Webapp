@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, Play, Image, AlertTriangle, ShieldCheck, Download, Trash2, HardHat, Users, Bike, Clock, X } from 'lucide-react';
-import { detectImage, detectVideo } from '../services/api';
+import { detectImage, detectVideo, API_BASE } from '../services/api';
 
 export default function DetectionPage({ showToast }) {
   const [file, setFile] = useState(null);
@@ -10,8 +10,6 @@ export default function DetectionPage({ showToast }) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [resultImageUrl, setResultImageUrl] = useState(null);
-
-  const API_BASE = import.meta.env.VITE_API_URL || '';
 
   const onDrop = useCallback((acceptedFiles) => {
     const f = acceptedFiles[0];
