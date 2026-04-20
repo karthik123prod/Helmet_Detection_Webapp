@@ -6,7 +6,7 @@ sqlalchemy==2.0.35
 aiosqlite==0.20.0
 loguru==0.7.2
 numpy==1.26.4
-opencv-python-headless==4.10.0.84
+opencv-python-headless>=4.13.0
 yagmail==0.15.293
 tf-keras==2.16.0
 tensorflow-cpu==2.16.2

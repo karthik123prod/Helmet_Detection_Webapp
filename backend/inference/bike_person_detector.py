@@ -23,7 +23,14 @@ class BikePersonDetector:
         self.labels = open(labels_path).read().strip().split('\n')
         logger.info(f"Bike/Person labels: {self.labels}")
 
-        self.net = cv2.dnn.readNetFromDarknet(cfg_path, weights_path)
+        # Integrity check: YOLOv3 weight file should be ~248MB
+        weights_size = Path(weights_path).stat().st_size
+        if weights_size < 1_000_000:
+            logger.error(f"FATAL: Weights file {weights_path} is too small ({weights_size} bytes). Likely a Git LFS pointer.")
+            raise ValueError(f"Corrupted weights file: {weights_path}")
+
+        # Use readNet for better compatibility with different OpenCV builds
+        self.net = cv2.dnn.readNet(weights_path, cfg_path)
         self.net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
         self.net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
@@ -56,8 +63,14 @@ class BikePersonDetector:
                 class_id = np.argmax(scores)
                 conf = float(detection[4] * scores[class_id])
 
-                # Only keep person and motorbike (classes 0 and 1 in our filtered labels)
-                if conf > confidence and class_id <= 1:
+                # COCO Dataset IDs: 0=person, 1=bicycle, 2=car, 3=motorbike
+                COCO_PERSON = 0
+                COCO_MOTORBIKE = 3
+
+                if conf > confidence and class_id in [COCO_PERSON, COCO_MOTORBIKE]:
+                    # Map to our labels: index 0 (person) or 1 (motorbike)
+                    mapped_id = 0 if class_id == COCO_PERSON else 1
+                    
                     center_x = int(detection[0] * w)
                     center_y = int(detection[1] * h)
                     box_w = int(detection[2] * w)
@@ -67,7 +80,7 @@ class BikePersonDetector:
 
                     boxes.append([x, y, box_w, box_h])
                     confidences.append(conf)
-                    class_ids.append(class_id)
+                    class_ids.append(mapped_id)
 
         indices = cv2.dnn.NMSBoxes(boxes, confidences, confidence, nms_threshold)
 
